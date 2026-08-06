@@ -1,10 +1,10 @@
 # Student Performance Analysis
 
-An academic-style machine learning project predicting university students' end-of-term grades from demographic, family, and study-habit features, with the goal of producing thesis-quality methodology, evaluation, and write-up.
+An academic-style machine learning project predicting university students' end-of-term grades from demographic, family, and study-habit features.
 
 ## Author
 
-[Your name] — Teaching/Research Assistant, Department of Physics, KNUST. Project advised in collaboration with Claude (Anthropic) acting as a research mentor.
+Asoa Anaaba Joseph — Teaching/Research Assistant, Department of Physics, KNUST(2026).
 
 ## Research questions
 

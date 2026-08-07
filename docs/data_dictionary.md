@@ -46,8 +46,8 @@
 
 ## Notes for modeling
 
-- **All predictors are ordinal/nominal-coded integers**, not continuous measurements — this has direct implications for preprocessing (treat as categorical/ordinal, not scale numerically without justification) and for choice of EDA statistics (mode/Cramér's V over mean/Pearson r for nominal fields).
-- **Target imbalance observed in this copy:** class 0 (Fail) has only 8 of 145 students; class 1 (DD) has 35. This must be addressed explicitly (stratified splits, appropriate metrics — macro-F1 rather than accuracy alone, possibly class-weighting) and reported as a limitation.
-- **COURSE ID is unevenly distributed** (66/145 students from a single course) — a potential confound/clustering effect worth testing (do grading patterns differ by course?) before pooling all courses into one model.
-- **GRADE 29/30 (GPA brackets) are themselves bucketed**, so treating them as ordinal-numeric (1–5) is a reasonable simplification but should be stated as an assumption, not silently assumed.
-- Original study (Yılmaz & Şekeroğlu, 2019) modeled this as an 8-class classification problem and reported best results with a Radial Basis Function Neural Network (~88% accuracy on their split) — this is a useful **benchmark to cite and compare against**, not a target to chase blindly, since their evaluation protocol details (CV vs. holdout) should be checked before treating 88% as directly comparable.
+- **All predictors are ordinal/nominal-coded integers**, this has direct implications for preprocessing (treat as categorical/ordinal) and for choice of EDA statistics (mode/Cramér's V over mean/Pearson r for nominal fields).
+- **Target imbalance observed in this copy:** class 0 (Fail) has only 8 of 145 students; class 1 (DD) has 35. This will be addressed explicitly (stratified splits, macro-F1, possibly class-weighting) and will be reported as a limitation.
+- **COURSE ID is unevenly distributed** (66/145 students from a single course), a potential confound/clustering effect worth testing (do grading patterns differ by course?) before pooling all courses into one model.
+- **GRADE 29/30 (GPA brackets) are themselves bucketed**, treating them as ordinal-numeric (1–5) is a reasonable simplification.
+- Original study (Yılmaz & Şekeroğlu, 2019) modeled this as an 8-class classification problem and reported best results with a Radial Basis Function Neural Network (~88% accuracy on their split), this is a useful **benchmark to cite and compare against**, since their evaluation protocol details (CV vs. holdout) should be checked before treating 88% as directly comparable.

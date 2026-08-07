@@ -40,17 +40,15 @@ This is a textbook confound: sex correlates with grade largely *because* sex cor
 
 Ranked by Cramér's V against `grade` (full table: `reports/eda_feature_associations.csv`):
 
-------------------------------------------------------------------
-| Feature                 | Cramér's V | Spearman ρ | Spearman p |
-------------------------------------------------------------------
-| course_id               | 0.376      | 0.135      | 0.106      |
-| sex                     | 0.365      | 0.331      | <0.0001    |
-| gpa_last_semester       | 0.262      | 0.351      | <0.0001    |
-| age_group               | 0.228      | -0.070     | 0.401      |
-| project_impact          | 0.201      | -0.185     | 0.026      |
-| scholarship_type        | 0.180      | 0.065      | 0.441      |
-| gpa_expected_graduation | 0.169      | 0.272      | 0.001      |
-------------------------------------------------------------------
+| Feature                   | Cramér's V | Spearman's ρ | p-value |
+|:--------------------------|-----------:|-------------:|---------:|
+| course_id                 |      0.376 |        0.135 |    0.106 |
+| sex                       |      0.365 |        0.331 |  <0.0001 |
+| gpa_last_semester         |      0.262 |        0.351 |  <0.0001 |
+| age_group                 |      0.228 |       -0.070 |    0.401 |
+| project_impact            |      0.201 |       -0.185 |    0.026 |
+| scholarship_type          |      0.180 |        0.065 |    0.441 |
+| gpa_expected_graduation   |      0.169 |        0.272 |    0.001 |
 
 Most "study habit" self-report items (weekly study hours, note-taking, listening, discussion benefit, flipped-classroom attitude, midterm prep style) show **weak, often non-significant** marginal association with final grade. It either means 
 

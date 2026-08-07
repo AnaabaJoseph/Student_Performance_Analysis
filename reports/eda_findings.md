@@ -6,7 +6,7 @@
 
 `reports/figures/01_target_distribution.png`
 
-Moderately imbalanced. The two largest classes are DD (n=35) and DC (n=24); the smallest is Fail (n=8). Grades AA, BA, BB, CB, CC are all in the 10–21 range. This rules out plain accuracy as a sufficient metric, a model that never predicts "Fail" could still score >90% accuracy while being clinically useless for the one outcome that arguably matters most (catching at-risk students). **Decision: use macro-F1 / balanced accuracy as primary metrics, accuracy as secondary.**
+Moderately imbalanced. The two largest classes are DD (n=35) and DC (n=24); the smallest is Fail (n=8). Grades AA, BA, BB, CB, CC are all in the 10–21 range. This rules out plain accuracy as a sufficient metric. **Decision: macro-F1 / balanced accuracy will be used as primary metrics, accuracy as secondary.**
 
 ## 2. Course is a dominant factor and a structural confound
 
@@ -14,9 +14,9 @@ Moderately imbalanced. The two largest classes are DD (n=35) and DC (n=24); the 
 
 A Kruskal-Wallis test shows grade differs significantly across the 9 courses (H = 80.79, p < 0.00001). Mean grade by course ranges from 1.36 (course 8) to 6.33 (course 7), which is a huge spread, larger than the spread explained by any individual student-level predictor. Course sample sizes are also wildly uneven (course 1: n=66; course 2: n=2).
 
-**IMPLICATION:** Course identity (or whatever it proxies for, whether grading strictness, subject difficulty or instructor) is likely the single strongest predictor in the dataset. There is two honest options:
+**IMPLICATION:** Course identity is likely the single strongest predictor in the dataset. There is two options:
 
-    (a) Include `course_id` as a categorical feature and let the model use it - defensible, matches the original study's framing, but means the model is partly "predicting" things specific to this exact course roster rather than general study-behavior effects.
+    (a) Include `course_id` as a categorical feature and let the model use it - defensible.
 
     (b) Analyze student-behavior effects **within course**, or control for course explicitly (e.g., stratify, or model grade residualized against course).
 
@@ -32,7 +32,7 @@ This is a textbook confound: sex correlates with grade largely *because* sex cor
 
 `reports/figures/04_grade_by_prior_gpa.png`
 
-`gpa_last_semester` is significantly and monotonically associated with `grade` (Spearman ρ = 0.351, p < 0.0001) — and unlike course or sex, this is conceptually unconfounded: past performance plausibly *causes* future performance through student-level ability/habits. It's the most "real" signal in the dataset besides course.
+`gpa_last_semester` is significantly and monotonically associated with `grade` (Spearman ρ = 0.351, p < 0.0001) and it is conceptually unconfounded: past performance plausibly *causes* future performance through student-level ability/habits. It's the most "real" signal in the dataset besides course.
 
 `gpa_expected_graduation` (students' self-reported expectation) correlates with `grade` too (ρ = 0.272) but is itself correlated with `gpa_last_semester` (ρ = 0.654), meaningful multicollinearity. Including both is partly double-counting "prior performance perception." **Decision to make in Stage 2:** keep both and let regularization handle it, or engineer a single combined feature  document.
 
@@ -62,7 +62,7 @@ Most "study habit" self-report items (weekly study hours, note-taking, listening
 
 `reports/figures/05_predictor_correlation_heatmap.png`
 
-Only one predictor pair exceeds |ρ| = 0.5: `gpa_last_semester` ↔ `gpa_expected_graduation` (ρ = 0.654), already discussed in §4. No other concerning collinearity among the 30 predictors, tree-based models won't be troubled, and even for linear/logistic baselines, likely don't need aggressive dimensionality reduction, just a documented decision on the GPA pair.
+Only one predictor pair exceeds |ρ| = 0.5: `gpa_last_semester` ↔ `gpa_expected_graduation` (ρ = 0.654), already discussed in §4. No other concerning collinearity among the 30 predictors, tree-based models won't be troubled, and even for linear/logistic baselines, likely don't need aggressive dimensionality reduction.
 
 ## Decisions carried into Stage 2 (preprocessing)
 

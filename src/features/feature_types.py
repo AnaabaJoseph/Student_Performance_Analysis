@@ -4,9 +4,9 @@ Feature type classification for the Student Performance Analysis project.
 Every predictor was coded by the original survey as an integer, but integer coding
 does NOT imply ordinality. Treating a nominal variable (e.g. transport_mode) as ordinal
 (i.e. as a plain number a model can compare with <, >) silently injects a false notion
-of distance/order that the model will exploit — a common and under-reported error in
+of distance/order that the model will exploit, a common and under-reported error in
 papers using this dataset. Each variable below is classified by inspecting whether its
-*category labels* have a real, defensible order — not by assuming the survey's numbering
+*category labels* have a real, defensible order and not by assuming the survey's numbering
 means anything.
 
 ORDINAL: true increasing (or decreasing) scale -> encoded as-is (integer) or via

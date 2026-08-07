@@ -10,14 +10,13 @@ reasoning per feature: [`src/features/feature_types.py`](../src/features/feature
 Result: **15 ordinal, 15 nominal.** Three borderline cases worth flagging explicitly:
 
 - `class_attendance` (always/sometimes/never) is ordinal but the scale runs in the *opposite*
-  direction to "more attendance is better" — kept as ordinal since the order itself is real,
-  but coefficient/SHAP signs must be interpreted with this in mind later.
+  direction to "more attendance is better", kept as ordinal since the order itself is real.
 
 - `project_impact` (positive/negative/neutral) and `midterm_prep_timing` (closest-to-exam/
   regularly-during-semester/never)
   
   These two were coded by the original survey as 1/2/3, but those
-  numbers do **not** correspond to a quality ranking — treating them as ordinal would silently
+  numbers do **not** correspond to a quality ranking, treating them as ordinal would silently
   tell the model "neutral > negative" and "never preparing > cramming," which is not a
   defensible claim. Both are treated as nominal.
 
@@ -31,9 +30,7 @@ parallel feature sets:
 - **`include_course=False`**: course_id excluded entirely
 
 Every model in Stages 3–5 will be trained and evaluated under **both** conditions, on identical
-CV folds, so the contrast itself becomes a reportable result (e.g., "how much of model
-performance is actually course identity vs. genuine behavioral signal?").
-
+CV folds.
 ## 3. Encoding
 
 - **Ordinal features**: passed through unchanged (already a valid integer scale, e.g.
@@ -62,26 +59,17 @@ Reasoning:
   carry signal that neither variable alone captures. Dropping one pre-emptively would discard
   that without testing it.
 
-- If the linear baseline in Stage 3 shows unstable coefficients for this pair, I will revisit.
-  (e.g., add an explicit "expectation gap" engineered feature)
-
 ## 5. Train/validation protocol
 
 Given n=145 and a smallest class of 8 (Fail), a single train/test holdout would leave too few
 Fail examples in whichever split they land in to evaluate reliably. Decision: **5-fold stratified
 cross-validation**, fixed and saved once (`random_state=42`) to `data/processed/cv_folds.csv` via
 `src/data/make_cv_folds.py`, so every model in every later stage is compared on **identical**
-folds, required for the model and feature-set comparisons to be valid rather than
-artifacts of different random splits.
-
-Fold sizes: 29/29/29/29/29. Class 0 (Fail, n=8) is spread 1–2 per fold thin, but unavoidable
-given the class size; will be flagged as a limitation in the final write-up, and macro-F1
-will be reported with appropriate caution for this class.
-
+folds, required for the model and feature-set comparisons to be valid.
 ## Artifacts produced this stage
 
-- `src/features/feature_types.py` — ordinal/nominal classification + justification
-- `src/features/build_features.py` — `build_preprocessor()`, `prepare_dataset()`
-- `src/data/make_cv_folds.py` — fixed CV fold generator
-- `data/processed/cv_folds.csv` — saved fold assignment (student_id, grade, fold)
-- `notebooks/02_preprocessing_feature_engineering.ipynb` — reproducible walkthrough
+- `src/features/feature_types.py`: ordinal/nominal classification + justification
+- `src/features/build_features.py`: `build_preprocessor()`, `prepare_dataset()`
+- `src/data/make_cv_folds.py`: fixed CV fold generator
+- `data/processed/cv_folds.csv`: saved fold assignment (student_id, grade, fold)
+- `notebooks/02_preprocessing_feature_engineering.ipynb`: reproducible walkthrough

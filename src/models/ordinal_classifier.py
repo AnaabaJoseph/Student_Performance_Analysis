@@ -1,8 +1,7 @@
 """
 Ordinal classification via binary decomposition (Frank & Hall, 2001).
 
-No ordinal-regression package (mord, statsmodels) is available in this environment, so this
-implements the well-established Frank & Hall decomposition directly on top of sklearn, which
+This implements the well-established Frank & Hall decomposition directly on top of sklearn, which
 keeps the project fully reproducible without external ordinal-regression dependencies.
 
 Reference:
@@ -21,8 +20,7 @@ classifier k predicts P(y > c_k). The class probabilities are then recovered as:
   P(y = c_k)     = P(y > c_{k-1}) - P(y > c_k)      for 0 < k < K-1
   P(y = c_{K-1}) = P(y > c_{K-2})
 This preserves the ordering of the classes (predicting "close" misses rather than treating all
-errors as equally bad, unlike one-vs-rest nominal multiclass classification), while still using
-only standard, interpretable binary logistic regression underneath.
+errors as equally bad, unlike one-vs-rest nominal multiclass classification).
 """
 from __future__ import annotations
 

@@ -8,27 +8,25 @@
                 metric for the nominal vs. ordinal question).
 
 Full numbers: `reports/stage3_baseline_results.csv`. Chart: `reports/figures/06_baseline_model_comparison.png`.
---------------------------------------------------------------------
-| Feature set    | Model        | Macro-F1      | Accuracy | MAE   |
---------------------------------------------------------------------
-| with_course    | LR (nominal) | 0.247 ± 0.052 | 0.303    | 1.455 |
-| with_course    | k-NN (k=5)   | 0.244 ± 0.038 | 0.338    | 1.676 |
-| with_course    | LR (ordinal) | 0.244 ± 0.058 | 0.283    | 1.379 |
-| without_course | k-NN (k=5)   | 0.211 ± 0.070 | 0.331    | 1.917 |
-| without_course | LR (nominal) | 0.143 ± 0.048 | 0.193    | 2.048 |
-| without_course | LR (ordinal) | 0.122 ± 0.055 | 0.152    | 2.048 |
---------------------------------------------------------------------
+| Feature Set | Model        | Macro-F1 (Mean ± SD) | Accuracy | MAE   |
+|:------------|:-------------|---------------------:|---------:|------:|
+| **With course** | LR (Nominal) | **0.247 ± 0.052** | 0.303 | 1.455 |
+|               | k-NN (k = 5) | 0.244 ± 0.038 | **0.338** | 1.676 |
+|               | LR (Ordinal) | 0.244 ± 0.058 | 0.283 | **1.379** |
+| **Without course** | k-NN (k = 5) | **0.211 ± 0.070** | **0.331** | **1.917** |
+|               | LR (Nominal) | 0.143 ± 0.048 | 0.193 | 2.048 |
+|               | LR (Ordinal) | 0.122 ± 0.055 | 0.152 | 2.048 |
+
 ## Finding 1: course_id carries most of the learnable signal
 
 Every model performs substantially better with `course_id` included (macro-F1 roughly +0.07 to
 +0.12 absolute, MAE roughly 0.4–0.6 grade-points lower). This is the direct, quantified
-confirmation of the Stage 1 EDA finding that course identity is not a nuisance variable, it is the
-dominant predictor available in this dataset. 
+confirmation of the Stage 1 EDA finding that course identity is the dominant predictor available in this dataset. 
 
-## Finding 2: nominal vs. ordinal framing — a genuine, non-obvious result
+## Finding 2: nominal vs. ordinal framing
 
 Macro-F1 and accuracy are essentially tied between nominal and ordinal logistic regression
-(within one standard deviation of each other in both feature-set conditions) — ordinal framing
+(within one standard deviation of each other in both feature-set conditions). Ordinal framing
 does **not** improve raw classification correctness here. But **MAE tells a different story**:
 under `with_course`, ordinal LR has the lowest MAE of all six configurations (1.379 vs. 1.455
 for nominal LR), meaning **when the ordinal model is wrong, it tends to be wrong by less**, it
@@ -41,25 +39,22 @@ during training.
 
 No baseline dramatically outperforms the others within a feature-set condition, macro-F1 spans
 only ~0.24–0.25 (with_course) or ~0.12–0.21 (without_course). This sets the floor that Stage 4
-(Random Forest / Gradient Boosting) needs to clear meaningfully to justify the added complexity,
-not just nominally beat by a fraction of a point.
+(Random Forest / Gradient Boosting) needs to clear meaningfully to justify the added complexity.
 
 ## Comparison to the literature benchmark
 
 The original study (Yılmaz & Şekeroğlu, 2020) reports ~88% accuracy with a Radial Basis Function
-Neural Network. Our best accuracy here (k-NN, with_course: 33.8%) is far below that. This gap is
-worth investigating rather than treating as a failure 
+Neural Network. The best accuracy here (k-NN, with_course: 33.8%) is far below that.
 
 ## Known limitation
 
 `course_id` includes categories with very few students (course 2: n=2). In some CV folds,
 validation students from a thin course had a `course_id` value not seen during that fold's
-training split — `handle_unknown='ignore'` in the encoder handles this gracefully (treated as
+training split, `handle_unknown='ignore'` in the encoder handles this gracefully (treated as
 all-zero dummy) but effectively means the model has no course-specific information for those
-students in that fold. This is a structural limitation of the dataset, not a bug.
-
+students in that fold which is a structural limitation of the dataset
 ## Carried into Stage 4
 
 - Try Random Forest and Gradient Boosting under both feature-set conditions, same fixed folds, same three metrics.
-- Investigate per-class performance (confusion matrix) for the best baseline — macro-F1 alone hides which classes are failing.
+- Investigate per-class performance (confusion matrix) for the best baseline.
 - Revisit the literature benchmark gap once tree-based models are in hand.
